@@ -5,7 +5,14 @@ import helmet from 'helmet'
 import DoctorController from '@/application/controller/DoctorController'
 import PatientController from '@/application/controller/PatientController'
 import { validateBody, validateParams } from '@/infra/ValidationMiddleware'
-import { authenticationSchema, createAppointmentPatientIdSchema, createAppointmentScheduleIdSchema, getDoctorByIdSchema, getPatientByPhoneSchema } from '@/infra/ValidationSchemas'
+import {
+  authenticationSchema,
+  createAppointmentPatientIdSchema,
+  createAppointmentScheduleIdSchema,
+  getDoctorByIdSchema,
+  getPatientByPhoneSchema
+} from '@/infra/ValidationSchemas'
+import { errorHandling } from '@/infra/helpers/ErrorHandling'
 
 export default class Router {
   app: express.Express
@@ -18,8 +25,9 @@ export default class Router {
     this.app.use(cors())
     this.app.use(helmet())
     this.app.use(express.json())
-
+    
     this.setRoutes()
+    this.app.use(errorHandling)
   }
 
   private setRoutes(){

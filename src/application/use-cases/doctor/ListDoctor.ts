@@ -1,4 +1,5 @@
 import DatabaseService from "@/infra/DatabaseService";
+import { NotFoundError } from "@/infra/helpers/Errors";
 
 export default class ListDoctorUseCase {
   constructor(readonly database: DatabaseService){
@@ -10,7 +11,7 @@ export default class ListDoctorUseCase {
     const doctors = await this.database.listDoctor()
 
     if(!doctors){
-      throw new Error('Doctors not found')
+      throw new NotFoundError('Doctors not found')
     }
 
     return doctors

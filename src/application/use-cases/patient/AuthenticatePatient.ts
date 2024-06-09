@@ -1,4 +1,5 @@
 import DatabaseService from "@/infra/DatabaseService";
+import { BussinesError, NotFoundError } from "@/infra/helpers/Errors";
 import { comparePassword, encodeToBase64 } from "@/infra/helpers/SecurityHelper";
 
 export default class AuthenticatePatientUseCase {
@@ -11,14 +12,14 @@ export default class AuthenticatePatientUseCase {
     const user = await this.database.getUserByPhone(phone)
 
     if(!user){
-      throw new Error('Patient not found')
+      throw new NotFoundError('Patient not found')
     }
    
     // verifica se a senha passada é igual a senha do paciente
     const isPasswordValid = comparePassword(password, user.password)
     
     if(!isPasswordValid){
-      throw new Error('Phone or Password is invalid')
+      throw new BussinesError('Phone or Password is invalid')
     }
 
     // retorna um token de autenticação

@@ -1,4 +1,5 @@
 import DatabaseService from "@/infra/DatabaseService";
+import { BussinesError } from "@/infra/helpers/Errors";
 import { hashPassword } from "@/infra/helpers/SecurityHelper";
 
 export default class CreatePatientUseCase {
@@ -11,7 +12,7 @@ export default class CreatePatientUseCase {
     const patient = await this.database.getPatientByPhone(phone)
 
     if(patient) {
-      throw new Error('Patient already exists with this phone number')
+      throw new BussinesError('Patient already exists with this phone number')
     }
     // gera um hash seguro para a senha ser armazenada no banco de dados
     const hashedPassword = hashPassword(password)
