@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { database } from "@/infra/DatabaseService";
+import { HttpStatusCode } from "@/infra/helpers/HttpStatusCode";
 import PatientController from "@/application/controller/PatientController";
 import CreatePatientUseCase from "@/application/use-cases/patient/CreatePatient";
 import CreateAppointmentUseCase from "@/application/use-cases/patient/CreateAppointment";
@@ -11,7 +12,7 @@ export default class PatientControllerImpl implements PatientController {
     const { name, phone, password } = req.body
     const useCase = new CreatePatientUseCase(database)
     const patient = await useCase.execute(name, phone, password)
-    res.status(201).json(patient)
+    res.status(HttpStatusCode.CREATED).json(patient)
   }
 
   async createAppointment(req: Request, res: Response) {
@@ -19,20 +20,20 @@ export default class PatientControllerImpl implements PatientController {
     const { patientId } = req.params
     const useCase = new CreateAppointmentUseCase(database)
     const appointment = await useCase.execute(Number(patientId), Number(scheduleId))
-    res.status(201).json(appointment)
+    res.status(HttpStatusCode.CREATED).json(appointment)
   }
 
   async authenticatePatient(req: Request, res: Response) {
     const { phone, password } = req.body
     const useCase = new AuthenticatePatientUseCase(database)
     const patient = await useCase.execute(phone, password)
-    res.status(200).json(patient)
+    res.status(HttpStatusCode.OK).json(patient)
   }
 
   async getPatientByPhone(req: Request, res: Response) {
     const { phone } = req.params
     const useCase = new GetPatientByPhoneUseCase(database)
     const patient = await useCase.execute(phone)
-    res.status(200).json(patient)
+    res.status(HttpStatusCode.OK).json(patient)
   }
 }

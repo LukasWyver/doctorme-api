@@ -19,7 +19,7 @@ A API deve ter os seguintes casos de uso:
   - [x] Garantir que o ID do médico existe
   - [x] Retornar os dados do médico com a agenda
 - [x] Obter dados do paciente
-  - [ ] Garantir o acesso somente a usuários autenticados - Request
+  - [x] Garantir o acesso somente a usuários autenticados - Request
   - [x] Garantir que o Telefone de um paciente foi enviado na chamada - Requesrt
   - [x] Garantir que o Telefone é de um paciente que existe
   - [x] Incluir no retorno os agendamentos
@@ -34,18 +34,18 @@ A API deve ter os seguintes casos de uso:
 
 ### Tabelas do sistema
 
-- [ ] Patient _Paciente_
+- [x] Patient _Paciente_
   - _Campos: ID, UserID, Name, Phone, CreatedAt_
   - _Relações: Appointments[], User_
-- [ ] User
+- [x] User
   - _Campos: ID, Phone, Password, CreatedAt_
   - _Relações: Patient_
-- [ ] Appointment
+- [x] Appointment
   - _Campos: ID, Date, Made, PatientID, DoctorID, CreatedAt_
   - _Relações: Patient, Doctor_
-- [ ] Doctor
+- [x] Doctor
   - _Campos: ID, FirstName, LastName, City, State, Speciality, Bio, Picture, Price, Availability, Experience, Attendances, Address, CreatedAt_
   - _Relações: Agenda, Appointment_
-- [ ] Agenda
+- [x] Agenda
   - _Campos: ID, Date, Available, DoctorID, CreatedAt_
   - _Relações: Doctor_

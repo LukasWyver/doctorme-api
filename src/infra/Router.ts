@@ -4,7 +4,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import DoctorController from '@/application/controller/DoctorController'
 import PatientController from '@/application/controller/PatientController'
-import { validateBody, validateParams } from '@/infra/ValidationMiddleware'
+import { validateBody, validateParams, isAuthenticated } from '@/infra/ValidationMiddleware'
 import {
   authenticationSchema,
   createAppointmentPatientIdSchema,
@@ -52,17 +52,18 @@ export default class Router {
     )
 
     // Patient
+    this.app.post('/patient', this.patientController.createPatient)
     this.app.get(
       '/patient/:phone',
+      isAuthenticated,
       validateParams(getPatientByPhoneSchema),
       this.patientController.getPatientByPhone
     )
 
-    this.app.post('/patient', this.patientController.createPatient)
-
     // Appointment
     this.app.post(
       '/patient/:patientId/appointment',
+      isAuthenticated,
       validateParams(createAppointmentPatientIdSchema),
       validateBody(createAppointmentScheduleIdSchema),
       this.patientController.createAppointment
