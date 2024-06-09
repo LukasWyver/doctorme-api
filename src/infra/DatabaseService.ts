@@ -5,10 +5,12 @@ export default class DatabaseService {
 
   listDoctor(){
     // lógica de acesso ao banco de dados
-    return this.connection.doctor.findMany();
+    return this.connection.doctor.findMany({
+      include: { schedule: true }
+    });
   }
 
-  getDoctorById(id: number, includeSchedule: boolean = false){
+  getDoctorById( id: number, includeSchedule: boolean = false ){
     // lógica de acesso ao banco de dados
     return this.connection.doctor.findUnique({
       where: { id },
@@ -16,11 +18,48 @@ export default class DatabaseService {
     })
   }
 
-  getPatientByPhone(phone: string, includeAppointment: boolean = false){
+  getPatientByPhone(
+    phone: string,
+    includeAppointment: boolean = false,
+    includeDoctor: boolean = false
+  ){
     // lógica de acesso ao banco de dados
     return this.connection.patient.findUnique({
       where: { phone },
-      include: { appointment: includeAppointment }
+      include: { 
+        appointment: !includeAppointment
+        ? false
+        : {
+            include: {
+            doctor: includeDoctor,
+          } 
+        }
+      }
+    })
+  }
+
+  getUserByPhone(phone: string){
+    return this.connection.user.findUnique({
+      where: { phone }
+    })
+  }
+
+  getPatientById(id: number){
+    return this.connection.patient.findUnique({
+      where: { id },
+    })
+  }
+
+  getScheduleById(id: number){
+    return this.connection.schedule.findUnique({
+      where: { id },
+    })
+  }
+
+  updateSchedule(id: number, data: { available: boolean }) {
+    return this.connection.schedule.update({
+      where: { id },
+      data,
     })
   }
 
@@ -39,6 +78,16 @@ export default class DatabaseService {
         name,
         phone,
         userId,
+      }
+    })
+  }
+
+  createAppointment(patientId: number, doctorId: number, date: Date){
+    return this.connection.appointment.create({
+      data: {
+        patientId,
+        doctorId,
+        date,
       }
     })
   }
